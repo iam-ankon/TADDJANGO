@@ -96,22 +96,24 @@ class FabricationSerializer(serializers.ModelSerializer):
 
 
 class InquirySerializer(serializers.ModelSerializer):
+    # ✅ Read-only nested serializers for display
     buyer = BuyerSerializer(read_only=True)
     customer = CustomerSerializer(read_only=True)
-    buyer = serializers.PrimaryKeyRelatedField(
-        queryset=Buyer.objects.all(), required=False, allow_null=True
+
+    # ✅ Write-only ID fields
+    buyer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Buyer.objects.all(), write_only=True, required=False, allow_null=True
     )
-    customer = serializers.PrimaryKeyRelatedField(
-        queryset=Customer.objects.all(), required=False, allow_null=True
+    customer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Customer.objects.all(), write_only=True, required=False, allow_null=True
     )
 
-    # 🔁 Read-only nested serializers
+    # ✅ Keep other related fields as they are
     repeat_of = RepeatOfSerializer(read_only=True)
     same_style = StyleSerializer(read_only=True)
     item = ItemSerializer(read_only=True)
     fabrication = FabricationSerializer(read_only=True)
 
-    # 🔁 Write-only IDs
     repeat_of_id = serializers.PrimaryKeyRelatedField(
         source='repeat_of', queryset=RepeatOf.objects.all(), write_only=True
     )
@@ -130,6 +132,7 @@ class InquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inquiry
         fields = '__all__'
+
         extra_kwargs = {
             'image': {'required': False, 'allow_null': True},
             'image1': {'required': False, 'allow_null': True},

@@ -210,7 +210,7 @@ class EmployeeDetails(models.Model):
 
 
 class PerformanseAppraisal(models.Model):
-    employee_id = models.CharField(max_length=20, unique=True)
+    employee_id = models.CharField(max_length=20)
     name = models.CharField(max_length=255,blank=True, null=True)
     designation = models.CharField(max_length=255,blank=True, null=True)
     joining_date = models.DateField(blank=True, null=True)
